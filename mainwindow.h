@@ -21,6 +21,7 @@ public:
     QIcon icons[2][7];
     int board[9][9];
     void setBoard();
+    int* reverseBoard();
 private slots:
     void on_action_2_triggered();
     void on_action_3_triggered();

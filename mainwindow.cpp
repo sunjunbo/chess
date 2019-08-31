@@ -26,19 +26,19 @@ void MainWindow::init(){
     int x=50;
     int y=50;
 
-    icons[1][1]=QIcon(":/c/pic/black_rook.png");// 车
-    icons[1][2]=QIcon(":/c/pic/black_knight.png");// 马
-    icons[1][3]=QIcon(":/c/pic/black_bishop.png");// 象
-    icons[1][4]=QIcon(":/c/pic/black_king.png");// 王
-    icons[1][5]=QIcon(":/c/pic/black_queen.png");// 后
-    icons[1][6]=QIcon(":/c/pic/black_pawn.png");// 兵
+    icons[0][1]=QIcon(":/c/pic/black_rook.png");// 车
+    icons[0][2]=QIcon(":/c/pic/black_knight.png");// 马
+    icons[0][3]=QIcon(":/c/pic/black_bishop.png");// 象
+    icons[0][4]=QIcon(":/c/pic/black_king.png");// 王
+    icons[0][5]=QIcon(":/c/pic/black_queen.png");// 后
+    icons[0][6]=QIcon(":/c/pic/black_pawn.png");// 兵
 
-    icons[2][1]=QIcon(":/c/pic/white_rook.png");
-    icons[2][2]=QIcon(":/c/pic/white_knight.png");
-    icons[2][3]=QIcon(":/c/pic/white_bishop.png");
-    icons[2][4]=QIcon(":/c/pic/white_king.png");
-    icons[2][5]=QIcon(":/c/pic/white_queen.png");
-    icons[2][6]=QIcon(":/c/pic/white_pawn.png");
+    icons[1][1]=QIcon(":/c/pic/white_rook.png");
+    icons[1][2]=QIcon(":/c/pic/white_knight.png");
+    icons[1][3]=QIcon(":/c/pic/white_bishop.png");
+    icons[1][4]=QIcon(":/c/pic/white_king.png");
+    icons[1][5]=QIcon(":/c/pic/white_queen.png");
+    icons[1][6]=QIcon(":/c/pic/white_pawn.png");
     QGridLayout *layout = ui->gridLayout;
     layout->setSpacing(0);
     for(int i=1;i<=8;i++)
@@ -65,16 +65,29 @@ void MainWindow::on_action_2_triggered()
 }
 void MainWindow::setBoard()
 {
-    int s;
-    if(is_host) s=1;
-    else s=0;
-    for(int i=1;i<=2;i++)
-        for(int j=1;j<=8;j++)
-            ButtonMap[i][j]->setIcon(icons[s][(2*s-1)*board[i][j]]);
-    for(int i=8;i<=7;i--)
-        for(int j=1;j<=8;j++)
-            ButtonMap[i][j]->setIcon(icons[s][(2*s-1)*board[i][j]]);
+    if(is_host)
+    {
+        for(int i=1;i<=8;i++)
+            for(int j=1;j<=8;j++){
+                if(board[9-i][j]>0)
+                    ButtonMap[i][j]->setIcon(icons[0][board[9-i][j]]);
+                else
+                    ButtonMap[i][j]->setIcon(icons[1][-board[9-i][j]]);
+            }
+    }
+    else{
+        for(int i=1;i<=8;i++)
+            for(int j=1;j<=8;j++){
+                if(board[i][j]>0)
+
+                    ButtonMap[i][j]->setIcon(icons[0][board[i][j]]);
+
+                else
+                    ButtonMap[i][j]->setIcon(icons[1][-board[i][j]]);
+            }
+    }
 }
+
 void MainWindow::set_host()
 {   
     //作为服务器初始化，小红帽写
@@ -98,18 +111,6 @@ void MainWindow::set_client()
 {
     //作为客户端初始化，小红帽写
     //此时双方链接已经建立
-    int myboard[9][9] = {
-        0,0,0,0,0,0,0,0,0,
-        0,1,2,3,4,5,3,2,1,
-        0,6,6,6,6,6,6,6,6,
-        0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,
-        0,-6,-6,-6,-6,-6,-6,-6,-6,
-        0,-1,-2,-3,-4,-5,-3,-2,-1
-    };
-    memcpy(board,myboard,sizeof(myboard));
     setBoard();
 }
 
