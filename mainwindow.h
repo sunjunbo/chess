@@ -18,6 +18,7 @@ public:
     ~MainWindow();
     QTcpServer  *listenSocket;
     QTcpSocket *readWriteSocket;
+    QIcon icons[2][7];
 private slots:
     void on_action_2_triggered();
     void set_host();
@@ -28,6 +29,7 @@ private:
     Ui::MainWindow *ui;
     QPushButton * ButtonMap[9][9];
     bool is_host;//true 为主机，false 为客户端
+
 };
 extern MainWindow* mainwindow;
 #endif // MAINWINDOW_H
