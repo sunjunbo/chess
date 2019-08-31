@@ -22,7 +22,6 @@ public:
     QTcpServer  *listenSocket;
     QTcpSocket *readWriteSocket;
 private slots:
-    void set_host(QString host);//设置此为服务器，并设置服务器监听IP，端口号为2333
     void on_action_2_triggered();
     void set_host();
     void set_client();
