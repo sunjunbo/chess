@@ -18,8 +18,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::init(){
-    QPixmap pixtar("qrc:/c/pic/black_bishop.png");
-    taricon = new QIcon(pixtar);
     int width = 60;
     int x=50;
     int y=50;
@@ -30,15 +28,16 @@ void MainWindow::init(){
         {
             ButtonMap[i][j]=new QPushButton(this);
             ButtonMap[i][j]->setFixedSize(60,60);
-            ButtonMap[1][1]->setIcon(QIcon(QPixmap("qrc:/c/pic/black_bishop.png")));
+            ButtonMap[i][j]->setIconSize(QSize(60,60));
             if((i+j)%2==1)
                 ButtonMap[i][j]->setStyleSheet("background-color: rgb(235, 207, 167)");
             else
                 ButtonMap[i][j]->setStyleSheet("background-color: rgb(109, 114, 63)");
             layout->addWidget(ButtonMap[i][j],i,j);
         }
+    ButtonMap[1][1]->setIcon(QIcon(":/c/pic/black_bishop.png"));
 
-    QIcon q = ButtonMap[1][2]->icon;
+   // QIcon *q = ButtonMap[1][2]->icon;
 }
 
 
