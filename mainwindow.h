@@ -24,13 +24,13 @@ public:
     int* reverseBoard();
     bool canmove(int x,int y);
     int gettype(int x,int y);
-    bool ismychess(int i,int j);
+    bool ismychess(int x,int y);
     void sethighlight(int x,int y);
-    void origincolor(int i,int j);
+    void origincolor(int x,int y);
 private slots:
     void on_action_2_triggered();
     void on_action_3_triggered();
-    void onButtonClicked(int x,int y);
+    void onButtonClicked(int i,int j);
     void set_host();
     void set_client();
     void on_action_triggered();

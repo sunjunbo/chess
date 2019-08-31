@@ -51,7 +51,16 @@ void MainWindow::init(){
             layout->addWidget(ButtonMap[i][j],i,j);
         }
 }
-void MainWindow::onButtonClicked(int x,int y){
+void MainWindow::onButtonClicked(int i,int j){
+    int x,y;
+    if(is_host)
+    {
+        x=i;
+        y=j;
+    }
+    else{
+        x=9-i;y=9-j;
+    }
     if(!click_from)
     {
         if(gettype(x,y)!=0&&ismychess(x,y)){
@@ -78,34 +87,38 @@ void MainWindow::onButtonClicked(int x,int y){
 }
 void MainWindow::sethighlight(int x,int y)
 {
-    ButtonMap[x][y]->setStyleSheet("background-color: rgb(76, 84, 43)");
-}
-void MainWindow::origincolor(int i,int j){
-    if((i+j)%2==1)
-        ButtonMap[i][j]->setStyleSheet("background-color: rgb(235, 207, 167)");
+    if(is_host)
+        ButtonMap[x][y]->setStyleSheet("background-color: rgb(76, 84, 43)");
     else
-        ButtonMap[i][j]->setStyleSheet("background-color: rgb(109, 114, 63)");
+        ButtonMap[9-x][9-y]->setStyleSheet("background-color: rgb(76, 84, 43)");
+}
+void MainWindow::origincolor(int x,int y){
+    QPushButton * tmp;
+    if(is_host)
+        tmp=ButtonMap[x][y];
+    else
+        tmp=ButtonMap[9-x][9-y];
+    if((x+y)%2==1)
+        tmp->setStyleSheet("background-color: rgb(235, 207, 167)");
+    else
+        tmp->setStyleSheet("background-color: rgb(109, 114, 63)");
 }
 // 根据棋子种类判断是否可移动
 bool MainWindow::canmove(int x,int y){
 
 }
 int MainWindow::gettype(int x,int y){
-    int type;
-    if(is_host)
-        type = abs(board[x][y]);
-    else
-        type = abs(board[9-x][y]);
+    int type = abs(board[x][y]);
     return type;
 }
-bool MainWindow::ismychess(int i,int j){
+bool MainWindow::ismychess(int x,int y){
     if(is_host)
     {
-        if(board[i][j]<0)return true;
+        if(board[x][y]<0)return true;
         else return false;
     }
     else{
-        if(board[9-i][j]>0)return true;
+        if(board[x][y]>0)return true;
         else return false;
     }
 }
@@ -132,11 +145,11 @@ void MainWindow::setBoard()
     else{
         for(int i=1;i<=8;i++)
             for(int j=1;j<=8;j++){
-                if(board[9-i][j]>0)
-                    ButtonMap[i][j]->setIcon(icons[0][board[9-i][j]]);
+                if(board[9-i][9-j]>0)
+                    ButtonMap[i][j]->setIcon(icons[0][board[9-i][9-j]]);
 
                 else
-                    ButtonMap[i][j]->setIcon(icons[1][-board[9-i][j]]);
+                    ButtonMap[i][j]->setIcon(icons[1][-board[9-i][9-j]]);
             }
     }
 }
