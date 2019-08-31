@@ -36,9 +36,8 @@ void MainWindow::init(){
                 ButtonMap[i][j]->setStyleSheet("background-color: rgb(109, 114, 63)");
             layout->addWidget(ButtonMap[i][j],i,j);
         }
-    ButtonMap[1][1]->setIcon(QIcon(":/c/pic/black_bishop.png"));
+    int myside = 1;//or 8
 }
-
 
 void MainWindow::on_action_2_triggered()
 {
