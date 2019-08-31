@@ -111,6 +111,18 @@ void MainWindow::set_client()
 {
     //作为客户端初始化，小红帽写
     //此时双方链接已经建立
+    int myboard[9][9] = {
+        {0,0,0,0,0,0,0,0,0},
+        {0,1,2,3,4,5,3,2,1},
+        {0,6,6,6,6,6,6,6,6},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,-6,-6,-6,-6,-6,-6,-6,-6},
+        {0,-1,-2,-3,-4,-5,-3,-2,-1}
+    };
+    memcpy(board,myboard,sizeof(myboard));
     setBoard();
 }
 
@@ -129,13 +141,48 @@ void MainWindow::on_action_3_triggered()
         connect(this->readWriteSocket, SIGNAL(readyRead()), this, SLOT(rev_client()));
     }
 }
-
+//双方通信
+//mode:1.board
 void MainWindow::rev_host()
 {
     QByteArray buf = this->readWriteSocket->readAll();
+    QString* s = new QString(buf);
+    QTextStream stream(s,  QIODevice::ReadOnly);
+    int mode;
+    stream >> mode;
+    if(mode == 1){
+        decode_board(stream);
+        setBoard();
+    }
 }
 
 void MainWindow::rev_client()
 {
     QByteArray buf = this->readWriteSocket->readAll();
+    QString* s = new QString(buf);
+    QTextStream stream(s,  QIODevice::ReadOnly);
+    int mode;
+    stream >> mode;
+    if(mode == 1){
+        decode_board(stream);
+        setBoard();
+    }
+}
+
+void MainWindow::decode_board(QTextStream &in)
+{
+    for(int i = 1; i <= 8; ++i)
+        for(int j = 1; j <= 8; ++j)
+            in >> board[i][j];
+}
+//向对方发送棋局
+void MainWindow::send_board()
+{
+    QString s;
+    QTextStream out(&s);
+    out << 1 << ' ';
+    for(int i = 1; i <= 8; ++i)
+        for(int j = 1; j <= 8; ++j)
+            out << board[i][j] << ' ';
+   readWriteSocket->write(s.toStdString().c_str());
 }
