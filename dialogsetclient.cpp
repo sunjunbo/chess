@@ -1,8 +1,9 @@
 ﻿#include "dialogsetclient.h"
 #include "ui_dialogsetclient.h"
-
+#include"mainwindow.h"
 #include <QRegExpValidator>
 #include<QMessageBox>
+#include <QTcpSocket>
 DialogSetClient::DialogSetClient(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSetClient)
@@ -17,6 +18,10 @@ DialogSetClient::~DialogSetClient()
 
 void DialogSetClient::on_buttonBox_accepted()
 {
+    delete mainwindow->listenSocket;
+    delete mainwindow->readWriteSocket;
+    mainwindow->listenSocket = nullptr;
+    mainwindow->readWriteSocket = nullptr;
     QRegExp rx("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
     QValidator *validator = new QRegExpValidator(rx, this);
     QString s = ui->lineEdit->text();
@@ -25,11 +30,14 @@ void DialogSetClient::on_buttonBox_accepted()
         QMessageBox::about(this,tr("IP地址非法"),tr("IP地址非法"));
         return;
     }
+    mainwindow->readWriteSocket = new QTcpSocket();
+    mainwindow->readWriteSocket->connectToHost(QHostAddress(ui->lineEdit->text()),2333);
+    this->accept();
 }
 
 void DialogSetClient::on_buttonBox_rejected()
 {
-
+    this->reject();
 }
 void DialogSetClient::button_pressed(QString text)
 {
