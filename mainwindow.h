@@ -41,9 +41,12 @@ private:
     Ui::MainWindow *ui;
     QPushButton * ButtonMap[9][9];
     bool is_host;//true 为主机，false 为客户端
+    bool is_walking;//是否轮到自己走子
     void decode_board(QTextStream& in);
     void send_board();
-
+    void send_walk();
+    int string_to_cat(QString s);
+    QPoint string_to_po(QString s);
 };
 extern MainWindow* mainwindow;
 #endif // MAINWINDOW_H
