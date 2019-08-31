@@ -1,4 +1,4 @@
-#ifndef DIALOGUPGRADE_H
+﻿#ifndef DIALOGUPGRADE_H
 #define DIALOGUPGRADE_H
 
 #include <QDialog>
@@ -14,6 +14,15 @@ class DialogUpgrade : public QDialog
 public:
     explicit DialogUpgrade(QWidget *parent = nullptr);
     ~DialogUpgrade();
+
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_4_clicked();
 
 private:
     Ui::DialogUpgrade *ui;

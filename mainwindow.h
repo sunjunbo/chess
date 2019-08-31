@@ -27,7 +27,6 @@ private slots:
     void set_host();
     void set_client();
     void on_action_triggered();
-    void on_action_3_triggered();
     void rev_host();
     void rev_client();
 private:

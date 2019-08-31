@@ -131,10 +131,10 @@ void MainWindow::on_action_3_triggered()
 
 void MainWindow::rev_host()
 {
-
+    QByteArray buf = this->readWriteSocket->readAll();
 }
 
 void MainWindow::rev_client()
 {
-
+    QByteArray buf = this->readWriteSocket->readAll();
 }
