@@ -55,14 +55,14 @@ void MainWindow::onButtonClicked(int x,int y){
     if(!click_from)
     {
         if(gettype(x,y)!=0&&ismychess(x,y)){
-            from[0]=x;from[1]=y;
+            fromx=x;fromy=y;
             sethighlight(x,y);
             click_from=1;
         }
     }
     else{
         if(gettype(x,y)!=0&&ismychess(x,y)){
-            from[0]=x;from[1]=y;
+            fromx=x;fromy=y;
             return 0;
         }
         if(canmove(x,y)){

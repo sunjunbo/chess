@@ -37,7 +37,8 @@ private slots:
     void rev_client();
 private:
     bool click_from;
-    int from[2];
+    int fromx;
+    int fromy;
     Ui::MainWindow *ui;
     QPushButton * ButtonMap[9][9];
     bool is_host;//true 为主机，false 为客户端
