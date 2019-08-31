@@ -27,6 +27,7 @@ public:
     bool ismychess(int x,int y);
     void sethighlight(int x,int y);
     void origincolor(int x,int y);
+    void move(int x,int y);
 private slots:
     void on_action_2_triggered();
     void on_action_3_triggered();

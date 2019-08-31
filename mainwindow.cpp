@@ -115,6 +115,11 @@ void MainWindow::onButtonClicked(int i,int j){
         }
     }
 }
+void MainWindow::move(int x,int y)
+{
+    board[x][y]=board[fromx][fromy];
+    board[fromx][fromy] = 0;
+}
 void MainWindow::sethighlight(int x,int y)
 {
     if(is_host)
@@ -146,7 +151,21 @@ bool MainWindow::canmove(int x,int y){
     int dx2[4] = {1, 1, -1, -1};
     int dy2[4] = {1, -1, 1, -1};
     if(type == 1){//车
-
+        if(fromx==x)
+        {
+            for(int i=qMin(fromy,y)+1;i<qMax(fromy,y);i++)
+                if(gettype(x,i)!=0)
+                    return false;
+            return true;
+        }
+        else if(fromy==y)
+        {
+            for(int i=qMin(fromx,x)+1;i<qMax(fromx,x);i++)
+                if(gettype(i,y)!=0)
+                    return false;
+            return true;
+        }
+        else return false;
     }
     if(type == 2){//马
         if(abs(fromx - x) == 2 && abs(fromy - y) == 1 || abs(fromx - x) == 1 && abs(fromy - y) == 2)
@@ -154,7 +173,21 @@ bool MainWindow::canmove(int x,int y){
        return false;
     }
     if(type == 3){//象
-
+        if(abs(fromx-x)-abs(fromy-y)!=0)
+            return false;
+        if((fromx-x)*(fromy-y))
+        {
+            for(int i=1;i<abs(fromy-y);i++)
+                if(gettype(qMin(fromx,x)+i,qMin(fromy,y)+i)!=0)
+                    return false;
+            return true;
+        }
+        else{
+            for(int i=1;i<abs(fromy-y);i++)
+                if(gettype(qMin(fromx,x)+i,qMax(fromy,y)-i)!=0)
+                    return false;
+            return true;
+        }
     }
     if(type == 4){//王
         if(abs(fromx - x) <= 1 && abs(fromy - y) <= 1)
@@ -162,6 +195,37 @@ bool MainWindow::canmove(int x,int y){
         else return false;
     }
     if(type == 5){//后
+        if(fromx==x)
+        {
+            for(int i=qMin(fromy,y)+1;i<qMax(fromy,y);i++)
+                if(gettype(x,i)!=0)
+                    return false;
+            return true;
+        }
+        else if(fromy==y)
+        {
+            for(int i=qMin(fromx,x)+1;i<qMax(fromx,x);i++)
+                if(gettype(i,y)!=0)
+                    return false;
+            return true;
+        }
+        else if(abs(fromx-x)-abs(fromy-y)==0)
+        {
+            if((fromx-x)*(fromy-y))
+            {
+                for(int i=1;i<abs(fromy-y);i++)
+                    if(gettype(qMin(fromx,x)+i,qMin(fromy,y)+i)!=0)
+                        return false;
+                return true;
+            }
+            else{
+                for(int i=1;i<abs(fromy-y);i++)
+                    if(gettype(qMin(fromx,x)+i,qMax(fromy,y)-i)!=0)
+                        return false;
+                return true;
+            }
+        }
+        return false;
 
     }
     if(type == 6){//兵
