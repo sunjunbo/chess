@@ -86,7 +86,60 @@ void MainWindow::origincolor(int i,int j){
         ButtonMap[i][j]->setStyleSheet("background-color: rgb(109, 114, 63)");
 }
 // 根据棋子种类判断是否可移动
+//函数参数和函数调用的参数都使用board坐标
+//要求，参数传入位置有自己的子
+//要求，from和to不得相同
 bool MainWindow::canmove(int x,int y){
+    int type = gettype(x, y);
+    if(ismychess(x, y))//不能吃自己的
+        return false;
+    int dx1[4] = {-1, 1, 0, 0};
+    int dy1[4] = {0, 0, -1, 1};
+    int dx2[4] = {1, 1, -1, -1};
+    int dy2[4] = {1, -1, 1, -1};
+    if(type == 1){//车
+
+    }
+    if(type == 2){//马
+        if(abs(fromx - x) == 2 && abs(fromy - y) == 1 || abs(fromx - x) == 1 && abs(fromy - y) == 2)
+            return true;
+       return false;
+    }
+    if(type == 3){//象
+
+    }
+    if(type == 4){//王
+        if(abs(fromx - x) <= 1 && abs(fromy - y) <= 1)
+            return true;
+        else return false;
+    }
+    if(type == 5){//后
+
+    }
+    if(type == 6){//兵
+        if(is_host){
+            if(x == fromx - 1 && y == fromy && !board[x][y])
+                return true;
+            if(x == fromx - 1 && y == fromy - 1 && board[x][y] && !ismychess(x, y))
+                return true;
+            if(x == fromx - 1 && y == fromy + 1 && board[x][y] && !ismychess(x, y))
+                return true;
+            if(x == fromx - 2 && y == fromy && !board[x][y] && !board[x - 1][y])
+                return true;
+            return false;
+        }else{
+            if(x == fromx + 1 && y == fromy && !board[x][y])
+                return true;
+            if(x == fromx + 1 && y == fromy - 1 && board[x][y] && !ismychess(x, y))
+                return true;
+            if(x == fromx + 1 && y == fromy + 1 && board[x][y] && !ismychess(x, y))
+                return true;
+            if(x == fromx + 2 && y == fromy && !board[x][y] && !board[x + 1][y])
+                return true;
+            return false;
+        }
+    }
+
 
 }
 int MainWindow::gettype(int x,int y){
