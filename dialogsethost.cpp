@@ -49,6 +49,11 @@ void DialogSetHost::on_pushButton_clicked()
 
 void DialogSetHost::on_pushButton_2_clicked()
 {
-    mainwindow->listenSocket->close();
+    if(mainwindow->listenSocket)
+        mainwindow->listenSocket->close();
+    delete mainwindow->listenSocket;
+    delete mainwindow->readWriteSocket;
+    mainwindow->listenSocket = nullptr;
+    mainwindow->readWriteSocket = nullptr;
     this->reject();
 }

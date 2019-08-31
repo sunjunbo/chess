@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QTimer>
 #include <QtNetwork/QTcpServer>
 
 namespace Ui {
@@ -37,6 +38,9 @@ private slots:
     void on_action_triggered();
     void rev_host();
     void rev_client();
+    void on_actionsurrender_triggered();
+    void time_arrived();
+    void time_count_down();
 private:
     bool click_from;
     int fromx;
@@ -54,6 +58,8 @@ private:
     void my_success();
     int string_to_cat(QString s);
     QPoint string_to_po(QString s);
+    QTimer timer;
+    QTimer timer_count_down;
 };
 extern MainWindow* mainwindow;
 #endif // MAINWINDOW_H

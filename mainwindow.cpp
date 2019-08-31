@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     listenSocket = nullptr;
     readWriteSocket = nullptr;
     init();
+    connect(&timer, SIGNAL(timeout()), this, SLOT(time_arrived()));
+    connect(&timer_count_down, SIGNAL(timeout()), this, SLOT((time_count_down())));
 }
 
 MainWindow::~MainWindow()
@@ -85,8 +87,12 @@ void MainWindow::onButtonClicked(int i,int j){
         if(canmove(x,y)){
             if(board[x][y] && !ismychess(x, y) && gettype(x, y) == 4){
                 send_you_fail();
+                my_success();
+                return;
             }
-
+            timer.stop();
+            timer_count_down.stop();
+            ui->lcdNumber->setDigitCount(10);
 
             board[x][y] = board[fromx][fromy];
 
@@ -402,6 +408,10 @@ void MainWindow::rev_host()
     }
     if(mode == 2){
         is_walking  = true;
+        timer.start(10000);
+        timer_count_down.setSingleShot(false);
+        timer_count_down.start();
+        ui->lcdNumber->setDigitCount(10);
     }
     if(mode == 3){
         my_success();
@@ -424,6 +434,10 @@ void MainWindow::rev_client()
     }
     if(mode == 2){
         is_walking  = true;
+        timer.start(10000);
+        timer_count_down.setSingleShot(false);
+        timer_count_down.start();
+        ui->lcdNumber->setDigitCount(10);
     }
     if(mode == 3){
         my_success();
@@ -521,3 +535,20 @@ QPoint MainWindow::string_to_po(QString s)
 }
 
 
+
+void MainWindow::on_actionsurrender_triggered()
+{
+    send_you_success();
+    my_fail();
+}
+
+void MainWindow::time_arrived()
+{
+    send_you_success();
+    my_fail();
+}
+
+void MainWindow::time_count_down()
+{
+    ui->lcdNumber->setDigitCount(ui->lcdNumber->digitCount() - 1);
+}
