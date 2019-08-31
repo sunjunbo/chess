@@ -2,9 +2,11 @@
 #include "ui_mainwindow.h"
 #include"dialogsethost.h"
 #include "dialogsetclient.h"
+#include"dialogupgrade.h"
 #include <QFileDialog>
 #include<QGridLayout>
 #include<QTcpSocket>
+#include <qmessagebox.h>
 MainWindow* mainwindow;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,6 +54,8 @@ void MainWindow::init(){
         }
 }
 void MainWindow::onButtonClicked(int i,int j){
+    if(!is_walking)
+        return;
     int x,y;
     if(is_host)
     {
@@ -79,9 +83,35 @@ void MainWindow::onButtonClicked(int i,int j){
         }
         // 走过去
         if(canmove(x,y)){
-            move(x,y);
+            if(board[x][y] && !ismychess(x, y) && gettype(x, y) == 4){
+                send_you_fail();
+            }
+
+
+            board[x][y] = board[fromx][fromy];
+
+            board[fromx][fromy] = 0;
+
             click_from=0;
             origincolor(fromx,fromy);
+
+
+
+            bool upgrade = false;
+            if(gettype(x, y) == 6)
+               if(is_host && x == 1 || !is_host && x == 8)
+                   upgrade = true;
+            if(upgrade){
+                DialogUpgrade dialog;
+                board[x][y] = dialog.exec();
+            }
+
+            setBoard();
+            send_board();
+            is_walking = false;
+            send_walk();
+
+
         }
     }
 }
@@ -226,13 +256,15 @@ void MainWindow::set_host()
     memcpy(board,myboard,sizeof(myboard));
     setBoard();
     send_board();
+    send_walk();
 }
 
 void MainWindow::set_client()
 {
     //作为客户端初始化，小红帽写
     //此时双方链接已经建立
-    setBoard();
+
+
 }
 //服务器载入存档
 void MainWindow::on_action_triggered()
@@ -291,6 +323,8 @@ void MainWindow::on_action_3_triggered()
 //双方通信
 //mode:1.send_board
 //2.for you to walk
+//3.you win
+//4.you lost
 void MainWindow::rev_host()
 {
     QByteArray buf = this->readWriteSocket->readAll();
@@ -304,6 +338,12 @@ void MainWindow::rev_host()
     }
     if(mode == 2){
         is_walking  = true;
+    }
+    if(mode == 3){
+        my_success();
+    }
+    if(mode == 4){
+        my_fail();
     }
 }
 
@@ -320,6 +360,12 @@ void MainWindow::rev_client()
     }
     if(mode == 2){
         is_walking  = true;
+    }
+    if(mode == 3){
+        my_success();
+    }
+    if(mode == 4){
+        my_fail();
     }
 }
 
@@ -347,6 +393,45 @@ void MainWindow::send_walk()
     QTextStream out(&s);
     out << 2 << ' ';
     readWriteSocket->write(s.toStdString().c_str());
+}
+//告知对方输了
+void MainWindow::send_you_fail()
+{
+    QString s;
+    QTextStream out(&s);
+    out << 4 << ' ';
+    readWriteSocket->write(s.toStdString().c_str());
+}
+//告知对方赢了
+void MainWindow::send_you_success()
+{
+    QString s;
+    QTextStream out(&s);
+    out << 3 << ' ';
+    readWriteSocket->write(s.toStdString().c_str());
+
+}
+//自己输了
+void MainWindow::my_fail()
+{
+    delete mainwindow->listenSocket;
+    delete mainwindow->readWriteSocket;
+    mainwindow->listenSocket = nullptr;
+    mainwindow->readWriteSocket = nullptr;
+    memset(board,0, sizeof(board));
+    setBoard();
+    QMessageBox::about(this,tr("你赢了"),tr("你赢了"));
+}
+//自己赢了
+void MainWindow::my_success()
+{
+    delete mainwindow->listenSocket;
+    delete mainwindow->readWriteSocket;
+    mainwindow->listenSocket = nullptr;
+    mainwindow->readWriteSocket = nullptr;
+    memset(board,0, sizeof(board));
+    setBoard();
+    QMessageBox::about(this,tr("你输了"),tr("你输了"));
 }
 
 int MainWindow::string_to_cat(QString s)
