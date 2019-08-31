@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"dialogsethost.h"
+#include<QGridLayout>
 MainWindow* mainwindow;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,8 +37,6 @@ void MainWindow::init(){
             layout->addWidget(ButtonMap[i][j],i,j);
         }
     ButtonMap[1][1]->setIcon(QIcon(":/c/pic/black_bishop.png"));
-
-   // QIcon *q = ButtonMap[1][2]->icon;
 }
 
 
@@ -53,6 +52,11 @@ void MainWindow::set_host()
 }
 
 void MainWindow::set_client()
+{
+
+}
+
+void MainWindow::on_action_triggered()
 {
 
 }
