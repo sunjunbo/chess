@@ -40,6 +40,7 @@ void MainWindow::init(){
     icons[1][5]=QIcon(":/c/pic/white_queen.png");
     icons[1][6]=QIcon(":/c/pic/white_pawn.png");
     QGridLayout *layout = ui->gridLayout;
+    click_from=0;
     layout->setSpacing(0);
     for(int i=1;i<=8;i++)
         for(int j=1;j<=8;j++)
@@ -47,7 +48,7 @@ void MainWindow::init(){
             ButtonMap[i][j]=new QPushButton(this);
             ButtonMap[i][j]->setFixedSize(60,60);
             ButtonMap[i][j]->setIconSize(QSize(60,60));
-            connect( ButtonMap[i][j],SIGNAL(clicked(bool)),this,SLOT(onButtonClicked(i,j)));
+            connect( ButtonMap[i][j],SIGNAL(clicked()),this,SLOT(onButtonClicked()));
             if((i+j)%2==1)
                 ButtonMap[i][j]->setStyleSheet("background-color: rgb(235, 207, 167)");
             else
@@ -55,9 +56,29 @@ void MainWindow::init(){
             layout->addWidget(ButtonMap[i][j],i,j);
         }
 }
-void MainWindow::onButtonClicked(int i,int j){
+void MainWindow::onButtonClicked(){
+    int i,j;
+    for(int k=1;k<=8;k++)
+        for(int m=1;m<=8;m++)
+        {
+            if(ButtonMap[k][m]==QObject::sender())
+            {
+                i=k,j=m;
+                break;
+            }
+        }
+    int xx=0;
+    if(is_walking)xx=1;
+    if(is_host)
+        qDebug()<<"host"<<xx;
+    else
+        qDebug()<<"cli"<<xx;
+    qDebug()<<is_walking;
     if(!is_walking)
+       {
+        qDebug()<<"not waling";
         return;
+    }
     int x,y;
     if(is_host)
     {
@@ -69,13 +90,25 @@ void MainWindow::onButtonClicked(int i,int j){
     }
     if(!click_from)
     {
-        if(gettype(x,y)!=0&&ismychess(x,y)){
+        if(gettype(x,y)!=0)
+        {
+            qDebug()<<"haschess";
+            if(ismychess(x,y)){
+                qDebug()<<"mychess";
             fromx=x;fromy=y;
+            qDebug()<<"from";
             sethighlight(x,y);
             click_from=1;
+            }else{
+                qDebug()<<"notmychess";
+            }
+        }
+        else{
+            qDebug()<<"nochess";
         }
     }
     else{
+        qDebug()<<"click from";
         // 更换走子
         if(gettype(x,y)!=0&&ismychess(x,y)){
             origincolor(fromx,fromy);
@@ -85,6 +118,7 @@ void MainWindow::onButtonClicked(int i,int j){
         }
         // 走过去
         if(canmove(x,y)){
+            qDebug()<<"can move";
             if(board[x][y] && !ismychess(x, y) && gettype(x, y) == 4){
                 send_you_fail();
                 my_success();
@@ -149,13 +183,14 @@ void MainWindow::origincolor(int x,int y){
 //要求，参数传入位置有自己的子
 //要求，from和to不得相同
 bool MainWindow::canmove(int x,int y){
-    int type = gettype(x, y);
-    if(ismychess(x, y))//不能吃自己的
-        return false;
+    int type = gettype(fromx, fromy);
     int dx1[4] = {-1, 1, 0, 0};
     int dy1[4] = {0, 0, -1, 1};
     int dx2[4] = {1, 1, -1, -1};
     int dy2[4] = {1, -1, 1, -1};
+    qDebug()<<"type"<<type;
+
+    qDebug()<<"from"<<fromx<<fromy<<"to"<<x<<y;
     if(type == 1){//车
         if(fromx==x)
         {
@@ -174,14 +209,15 @@ bool MainWindow::canmove(int x,int y){
         else return false;
     }
     if(type == 2){//马
-        if(abs(fromx - x) == 2 && abs(fromy - y) == 1 || abs(fromx - x) == 1 && abs(fromy - y) == 2)
+        if((abs(fromx - x) == 2 && abs(fromy - y) == 1 )||( abs(fromx - x) == 1 && abs(fromy - y) == 2))
             return true;
+        qDebug()<<"ma fail";
        return false;
     }
     if(type == 3){//象
         if(abs(fromx-x)-abs(fromy-y)!=0)
             return false;
-        if((fromx-x)*(fromy-y))
+        if((fromx-x)*(fromy-y)>0)
         {
             for(int i=1;i<abs(fromy-y);i++)
                 if(gettype(qMin(fromx,x)+i,qMin(fromy,y)+i)!=0)
@@ -217,7 +253,7 @@ bool MainWindow::canmove(int x,int y){
         }
         else if(abs(fromx-x)-abs(fromy-y)==0)
         {
-            if((fromx-x)*(fromy-y))
+            if((fromx-x)*(fromy-y)>0)
             {
                 for(int i=1;i<abs(fromy-y);i++)
                     if(gettype(qMin(fromx,x)+i,qMin(fromy,y)+i)!=0)
@@ -242,7 +278,7 @@ bool MainWindow::canmove(int x,int y){
                 return true;
             if(x == fromx - 1 && y == fromy + 1 && board[x][y] && !ismychess(x, y))
                 return true;
-            if(x == fromx - 2 && y == fromy && !board[x][y] && !board[x - 1][y])
+            if(x == fromx - 2 && y == fromy && !board[x][y] && !board[x + 1][y])
                 return true;
             return false;
         }else{
@@ -252,7 +288,7 @@ bool MainWindow::canmove(int x,int y){
                 return true;
             if(x == fromx + 1 && y == fromy + 1 && board[x][y] && !ismychess(x, y))
                 return true;
-            if(x == fromx + 2 && y == fromy && !board[x][y] && !board[x + 1][y])
+            if(x == fromx + 2 && y == fromy && !board[x][y] && !board[x - 1][y])
                 return true;
             return false;
         }
@@ -333,7 +369,7 @@ void MainWindow::set_client()
 {
     //作为客户端初始化，小红帽写
     //此时双方链接已经建立
-
+    is_host=0;
 
 }
 //服务器载入存档
@@ -399,25 +435,28 @@ void MainWindow::rev_host()
 {
     QByteArray buf = this->readWriteSocket->readAll();
     QString* s = new QString(buf);
+    qDebug() << *s;
     QTextStream stream(s,  QIODevice::ReadOnly);
     int mode;
-    stream >> mode;
-    if(mode == 1){
-        decode_board(stream);
-        setBoard();
-    }
-    if(mode == 2){
-        is_walking  = true;
-        timer.start(10000);
-        timer_count_down.setSingleShot(false);
-        timer_count_down.start();
-        ui->lcdNumber->setDigitCount(10);
-    }
-    if(mode == 3){
-        my_success();
-    }
-    if(mode == 4){
-        my_fail();
+    while(!stream.atEnd()){
+        stream >> mode;
+        qDebug() << "get something" << mode;
+        if(mode == 1){
+            decode_board(stream);
+            setBoard();
+        }
+        if(mode == 2){
+            qDebug() << "i walk";
+            is_walking  = true;
+        }
+        if(mode == 3){
+            my_success();
+        }
+        if(mode == 4){
+            my_fail();
+        }
+        char tmp;
+        stream >> tmp;
     }
 }
 
@@ -425,25 +464,28 @@ void MainWindow::rev_client()
 {
     QByteArray buf = this->readWriteSocket->readAll();
     QString* s = new QString(buf);
+    qDebug() << *s;
     QTextStream stream(s,  QIODevice::ReadOnly);
     int mode;
-    stream >> mode;
-    if(mode == 1){
-        decode_board(stream);
-        setBoard();
-    }
-    if(mode == 2){
-        is_walking  = true;
-        timer.start(10000);
-        timer_count_down.setSingleShot(false);
-        timer_count_down.start();
-        ui->lcdNumber->setDigitCount(10);
-    }
-    if(mode == 3){
-        my_success();
-    }
-    if(mode == 4){
-        my_fail();
+    while(!stream.atEnd()){
+        stream >> mode;
+        qDebug() << "get something" << mode;
+        if(mode == 1){
+            decode_board(stream);
+            setBoard();
+        }
+        if(mode == 2){
+            qDebug() << "i walk";
+            is_walking  = true;
+        }
+        if(mode == 3){
+            my_success();
+        }
+        if(mode == 4){
+            my_fail();
+        }
+        char tmp;
+        stream >> tmp;
     }
 }
 
@@ -470,6 +512,7 @@ void MainWindow::send_walk()
     QString s;
     QTextStream out(&s);
     out << 2 << ' ';
+    qDebug() << "let you walk";
     readWriteSocket->write(s.toStdString().c_str());
 }
 //告知对方输了
