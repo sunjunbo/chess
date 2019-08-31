@@ -19,8 +19,11 @@ public:
     QTcpServer  *listenSocket;
     QTcpSocket *readWriteSocket;
     QIcon icons[2][7];
+    int board[9][9];
+    void setBoard();
 private slots:
     void on_action_2_triggered();
+    void on_action_3_triggered();
     void set_host();
     void set_client();
     void on_action_triggered();
