@@ -30,7 +30,7 @@ public:
 private slots:
     void on_action_2_triggered();
     void on_action_3_triggered();
-    void onButtonClicked(QPushButton b);
+    void onButtonClicked(int x,int y);
     void set_host();
     void set_client();
     void on_action_triggered();

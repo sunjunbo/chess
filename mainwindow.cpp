@@ -72,6 +72,7 @@ void MainWindow::onButtonClicked(int x,int y){
         if(canmove(x,y)){
             move(x,y);
             click_from=0;
+            origincolor(fromx,fromy);
         }
     }
 }
