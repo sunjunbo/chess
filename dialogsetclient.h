@@ -16,7 +16,6 @@ public:
     ~DialogSetClient();
 
 private slots:
-    void on_buttonBox_accepted();
     void button_pressed(QString text);
 
     void on_pushButton_clicked();
@@ -43,7 +42,9 @@ private slots:
 
     void on_pushButton_12_clicked();
 
-    void on_buttonBox_rejected();
+    void on_pushButton_13_clicked();
+
+    void on_pushButton_14_clicked();
 
 private:
     Ui::DialogSetClient *ui;
