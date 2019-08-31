@@ -27,17 +27,20 @@ CONFIG += c++11
 SOURCES += \
         dialogsetclient.cpp \
         dialogsethost.cpp \
+        dialogupgrade.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
         dialogsetclient.h \
         dialogsethost.h \
+        dialogupgrade.h \
         mainwindow.h
 
 FORMS += \
         dialogsetclient.ui \
         dialogsethost.ui \
+        dialogupgrade.ui \
         mainwindow.ui
 
 # Default rules for deployment.
