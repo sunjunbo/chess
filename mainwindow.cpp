@@ -125,12 +125,50 @@ void MainWindow::set_client()
     memcpy(board,myboard,sizeof(myboard));
     setBoard();
 }
-
+//服务器载入存档
 void MainWindow::on_action_triggered()
 {
+    if(!is_host)
+        return;
     //载入文件
     QString fileName = QFileDialog::getOpenFileName(this,
         tr("载入存档"), "", tr("存档(*.txt)"));
+    QFile file(fileName);
+    if(file.open(QIODevice::ReadOnly)){
+        QTextStream in(&file);
+        QString t;
+        in >> t;
+        if(t == "white"){
+            is_walking = true;
+        }else{
+            is_walking = false;
+            send_walk();
+        }
+        memset(board, 0, sizeof(board));
+        int color = is_walking;
+        while(!in.atEnd()){
+            in >> t;
+            if(t == "white" || t == "black"){
+                color ^= 1;
+                continue;
+            }
+            int type = string_to_cat(t);
+            int n;
+            in >> n;
+            for(int i = 1; i <= n; ++i){
+                QString pos;
+                in >> pos;
+                QPoint p = string_to_po(pos);
+                if(color == 1){
+                    board[p.x()][p.y()] = type;
+                }else{
+                    board[p.x()][p.y()] = -type;
+                }
+            }
+        }
+    }
+    setBoard();
+    send_board();
 }
 
 void MainWindow::on_action_3_triggered()
@@ -142,7 +180,8 @@ void MainWindow::on_action_3_triggered()
     }
 }
 //双方通信
-//mode:1.board
+//mode:1.send_board
+//2.for you to walk
 void MainWindow::rev_host()
 {
     QByteArray buf = this->readWriteSocket->readAll();
@@ -153,6 +192,9 @@ void MainWindow::rev_host()
     if(mode == 1){
         decode_board(stream);
         setBoard();
+    }
+    if(mode == 2){
+        is_walking  = true;
     }
 }
 
@@ -166,6 +208,9 @@ void MainWindow::rev_client()
     if(mode == 1){
         decode_board(stream);
         setBoard();
+    }
+    if(mode == 2){
+        is_walking  = true;
     }
 }
 
@@ -184,5 +229,37 @@ void MainWindow::send_board()
     for(int i = 1; i <= 8; ++i)
         for(int j = 1; j <= 8; ++j)
             out << board[i][j] << ' ';
-   readWriteSocket->write(s.toStdString().c_str());
+    readWriteSocket->write(s.toStdString().c_str());
 }
+//要求对方走子
+void MainWindow::send_walk()
+{
+    QString s;
+    QTextStream out(&s);
+    out << 2 << ' ';
+    readWriteSocket->write(s.toStdString().c_str());
+}
+
+int MainWindow::string_to_cat(QString s)
+{
+    if(s == "rook")
+        return 1;
+    if(s == "knight")
+        return 2;
+    if(s == "bishop")
+        return 3;
+    if(s == "king")
+        return 4;
+    if(s == "queen")
+        return 5;
+    if(s == "pawn")
+        return 6;
+}
+
+QPoint MainWindow::string_to_po(QString s)
+{
+
+    return QPoint(s.toStdString()[1] - '0' + 1, s.toStdString()[0] - 'a' + 1);
+}
+
+
