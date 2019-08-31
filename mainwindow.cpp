@@ -1,6 +1,8 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"dialogsethost.h"
+#include "dialogsetclient.h"
+#include <QFileDialog>
 #include<QGridLayout>
 MainWindow* mainwindow;
 MainWindow::MainWindow(QWidget *parent) :
@@ -42,20 +44,34 @@ void MainWindow::init(){
 void MainWindow::on_action_2_triggered()
 {
     DialogSetHost* dialog = new DialogSetHost();
-    dialog->exec();
+    if(dialog->exec() == QDialog::Accepted){
+        set_host();
+    }
 }
 
 void MainWindow::set_host()
 {
-
+    //作为服务器初始化，小红帽写
+    //此时双方链接已经建立
 }
 
 void MainWindow::set_client()
 {
-
+    //作为客户端初始化，小红帽写
+    //此时双方链接已经建立
 }
 
 void MainWindow::on_action_triggered()
 {
+    //载入文件
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("载入存档"), "", tr("存档(*.txt)"));
+}
 
+void MainWindow::on_action_3_triggered()
+{
+    DialogSetClient* dialog = new DialogSetClient();
+    if(dialog->exec() == QDialog::Accepted){
+        set_client();
+    }
 }
