@@ -42,3 +42,13 @@ void MainWindow::on_action_2_triggered()
     DialogSetHost* dialog = new DialogSetHost();
     dialog->exec();
 }
+
+void MainWindow::set_host()
+{
+
+}
+
+void MainWindow::set_client()
+{
+
+}

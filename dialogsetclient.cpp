@@ -22,7 +22,7 @@ void DialogSetClient::on_buttonBox_accepted()
     delete mainwindow->readWriteSocket;
     mainwindow->listenSocket = nullptr;
     mainwindow->readWriteSocket = nullptr;
-    QRegExp rx("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+    QRegExp rx("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
     QValidator *validator = new QRegExpValidator(rx, this);
     QString s = ui->lineEdit->text();
     int pos = 0;
