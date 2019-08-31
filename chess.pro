@@ -25,13 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        dialogsethost.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
+        dialogsethost.h \
         mainwindow.h
 
 FORMS += \
+        dialogsethost.ui \
         mainwindow.ui
 
 # Default rules for deployment.
