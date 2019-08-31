@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QPushButton>
 #include <QtNetwork/QTcpServer>
 
 namespace Ui {
@@ -12,10 +12,7 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
-
-
-
+    void init();
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -27,6 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QPushButton * ButtonMap[9][9];
     bool is_host;//true 为主机，false 为客户端
 };
 static MainWindow* mainwindow;
