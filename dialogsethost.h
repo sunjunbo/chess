@@ -19,9 +19,11 @@ public:
     ~DialogSetHost();
 signals:
 private slots:
-    void on_buttonBox_accepted();
     void acceptConnection();
-    void on_buttonBox_rejected();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::DialogSetHost *ui;

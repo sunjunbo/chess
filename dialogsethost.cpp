@@ -2,6 +2,7 @@
 #include "ui_dialogsethost.h"
 #include<QPushButton>
 #include <QTcpSocket>
+extern MainWindow* mainwindow;
 DialogSetHost::DialogSetHost(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogSetHost)
@@ -19,26 +20,35 @@ DialogSetHost::~DialogSetHost()
     delete ui;
 }
 
-void DialogSetHost::on_buttonBox_accepted()
-{
-    delete mainwindow->listenSocket;
-    delete mainwindow->readWriteSocket;
-    mainwindow->listenSocket = nullptr;
-    mainwindow->readWriteSocket = nullptr;
-    mainwindow->listenSocket = new QTcpServer();
-    mainwindow->listenSocket->listen(QHostAddress(ui->lineEdit->text()), 2333);
-    connect(mainwindow->listenSocket,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
-    ui->buttonBox->button(ui->buttonBox->Ok)->setEnabled(false);
-    mainwindow->readWriteSocket = new QTcpSocket();
-}
 
 void DialogSetHost::acceptConnection()
 {
     mainwindow->readWriteSocket = mainwindow->listenSocket->nextPendingConnection();
+    qDebug() << "hehe";
     this->accept();
 }
 
-void DialogSetHost::on_buttonBox_rejected()
+
+
+void DialogSetHost::on_pushButton_clicked()
+{
+    qDebug() << &mainwindow;
+    qDebug() << mainwindow->listenSocket;
+    delete mainwindow->listenSocket;
+    delete mainwindow->readWriteSocket;
+    mainwindow->listenSocket = nullptr;
+    mainwindow->readWriteSocket = nullptr;
+     qDebug() << "haha";
+    mainwindow->listenSocket = new QTcpServer();
+    mainwindow->listenSocket->listen(QHostAddress(ui->lineEdit->text()), 2345);
+     qDebug() << "haha";
+    connect(mainwindow->listenSocket,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
+    ui->buttonBox->button(ui->buttonBox->Ok)->setEnabled(false);
+     qDebug() << "haha";
+    qDebug() << "haha";
+}
+
+void DialogSetHost::on_pushButton_2_clicked()
 {
     mainwindow->listenSocket->close();
     this->reject();

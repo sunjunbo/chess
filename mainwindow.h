@@ -29,5 +29,5 @@ private:
     Ui::MainWindow *ui;
     bool is_host;//true 为主机，false 为客户端
 };
-static MainWindow* mainwindow;
+extern MainWindow* mainwindow;
 #endif // MAINWINDOW_H

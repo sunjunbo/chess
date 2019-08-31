@@ -15,8 +15,7 @@ DialogSetClient::~DialogSetClient()
 {
     delete ui;
 }
-
-void DialogSetClient::on_buttonBox_accepted()
+void DialogSetClient::on_pushButton_13_clicked()
 {
     delete mainwindow->listenSocket;
     delete mainwindow->readWriteSocket;
@@ -31,14 +30,15 @@ void DialogSetClient::on_buttonBox_accepted()
         return;
     }
     mainwindow->readWriteSocket = new QTcpSocket();
-    mainwindow->readWriteSocket->connectToHost(QHostAddress(ui->lineEdit->text()),2333);
+    mainwindow->readWriteSocket->connectToHost(QHostAddress(ui->lineEdit->text()),2345);
     this->accept();
 }
 
-void DialogSetClient::on_buttonBox_rejected()
+void DialogSetClient::on_pushButton_14_clicked()
 {
-    this->reject();
+        this->reject();
 }
+
 void DialogSetClient::button_pressed(QString text)
 {
     if(text.front().isDigit() || text.front() == '.'){
@@ -110,5 +110,6 @@ void DialogSetClient::on_pushButton_12_clicked()
 {
     button_pressed(ui->pushButton_12->text());
 }
+
 
 
