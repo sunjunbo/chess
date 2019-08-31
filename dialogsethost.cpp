@@ -43,7 +43,6 @@ void DialogSetHost::on_pushButton_clicked()
     mainwindow->listenSocket->listen(QHostAddress(ui->lineEdit->text()), 2345);
      qDebug() << "haha";
     connect(mainwindow->listenSocket,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
-    ui->buttonBox->button(ui->buttonBox->Ok)->setEnabled(false);
      qDebug() << "haha";
     qDebug() << "haha";
 }

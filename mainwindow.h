@@ -22,6 +22,8 @@ private slots:
     void on_action_2_triggered();
     void set_host();
     void set_client();
+    void on_action_triggered();
+
 private:
     Ui::MainWindow *ui;
     QPushButton * ButtonMap[9][9];
