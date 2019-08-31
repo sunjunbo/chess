@@ -420,7 +420,7 @@ void MainWindow::my_fail()
     mainwindow->readWriteSocket = nullptr;
     memset(board,0, sizeof(board));
     setBoard();
-    QMessageBox::about(this,tr("你赢了"),tr("你赢了"));
+    QMessageBox::about(this,tr("你输了"),tr("你输了"));
 }
 //自己赢了
 void MainWindow::my_success()
@@ -431,7 +431,7 @@ void MainWindow::my_success()
     mainwindow->readWriteSocket = nullptr;
     memset(board,0, sizeof(board));
     setBoard();
-    QMessageBox::about(this,tr("你输了"),tr("你输了"));
+    QMessageBox::about(this,tr("你赢了"),tr("你赢了"));
 }
 
 int MainWindow::string_to_cat(QString s)
