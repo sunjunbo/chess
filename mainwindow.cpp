@@ -62,6 +62,7 @@ void MainWindow::onButtonClicked(int x,int y){
     }
     else{
         if(gettype(x,y)!=0&&ismychess(x,y)){
+            origincolor(fromx,fromy);
             fromx=x;fromy=y;
             return 0;
         }

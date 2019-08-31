@@ -22,10 +22,11 @@ public:
     int board[9][9];
     void setBoard();
     int* reverseBoard();
-    bool canmove();
+    bool canmove(int x,int y);
     int gettype(int x,int y);
     bool ismychess(int x,int y);
     void sethighlight(int x,int y);
+    void origincolor(int i,int j);
 private slots:
     void on_action_2_triggered();
     void on_action_3_triggered();
