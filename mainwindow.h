@@ -24,7 +24,7 @@ public:
     int* reverseBoard();
     bool canmove(int x,int y);
     int gettype(int x,int y);
-    bool ismychess(int x,int y);
+    bool ismychess(int i,int j);
     void sethighlight(int x,int y);
     void origincolor(int i,int j);
 private slots:

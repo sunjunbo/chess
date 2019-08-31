@@ -61,11 +61,14 @@ void MainWindow::onButtonClicked(int x,int y){
         }
     }
     else{
+        // 更换走子
         if(gettype(x,y)!=0&&ismychess(x,y)){
             origincolor(fromx,fromy);
+            sethighlight(x,y);
             fromx=x;fromy=y;
-            return 0;
+            return;
         }
+        // 走过去
         if(canmove(x,y)){
             move(x,y);
             click_from=0;
@@ -89,12 +92,12 @@ bool MainWindow::canmove(int x,int y){
 int MainWindow::gettype(int x,int y){
     int type;
     if(is_host)
-        type = abs(board[i][j]);
+        type = abs(board[x][y]);
     else
-        type = abs(board[9-1][j]);
+        type = abs(board[9-x][y]);
     return type;
 }
-bool MainWindow::ismychess(int x,int y){
+bool MainWindow::ismychess(int i,int j){
     if(is_host)
     {
         if(board[i][j]<0)return true;
