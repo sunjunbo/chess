@@ -4,6 +4,7 @@
 #include "dialogsetclient.h"
 #include <QFileDialog>
 #include<QGridLayout>
+#include<QTcpSocket>
 MainWindow* mainwindow;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -60,6 +61,7 @@ void MainWindow::on_action_2_triggered()
     DialogSetHost* dialog = new DialogSetHost();
     if(dialog->exec() == QDialog::Accepted){
         set_host();
+        connect(this->readWriteSocket, SIGNAL(readyRead()), this, SLOT(rev_host()));
     }
 }
 
@@ -107,5 +109,16 @@ void MainWindow::on_action_3_triggered()
     DialogSetClient* dialog = new DialogSetClient();
     if(dialog->exec() == QDialog::Accepted){
         set_client();
+        connect(this->readWriteSocket, SIGNAL(readyRead()), this, SLOT(rev_client()));
     }
+}
+
+void MainWindow::rev_host()
+{
+
+}
+
+void MainWindow::rev_client()
+{
+
 }
