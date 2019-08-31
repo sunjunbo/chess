@@ -32,7 +32,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="text">
+          <string>127.0.0.1</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
