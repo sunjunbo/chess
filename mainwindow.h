@@ -48,6 +48,10 @@ private:
     void decode_board(QTextStream& in);
     void send_board();
     void send_walk();
+    void send_you_fail();
+    void send_you_success();
+    void my_fail();
+    void my_success();
     int string_to_cat(QString s);
     QPoint string_to_po(QString s);
 };
