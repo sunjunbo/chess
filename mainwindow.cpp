@@ -52,7 +52,6 @@ void MainWindow::init(){
                 ButtonMap[i][j]->setStyleSheet("background-color: rgb(109, 114, 63)");
             layout->addWidget(ButtonMap[i][j],i,j);
         }
-    int myside = 1;//or 8
 }
 
 void MainWindow::on_action_2_triggered()
@@ -62,37 +61,54 @@ void MainWindow::on_action_2_triggered()
         set_host();
     }
 }
-
+void MainWindow::setBoard()
+{
+    int s;
+    if(is_host) s=1;
+    else s=0;
+    for(int i=1;i<=2;i++)
+        for(int j=1;j<=8;j++)
+            ButtonMap[i][j]->setIcon(icons[s][(2*s-1)*board[i][j]]);
+    for(int i=8;i<=7;i--)
+        for(int j=1;j<=8;j++)
+            ButtonMap[i][j]->setIcon(icons[s][(2*s-1)*board[i][j]]);
+}
 void MainWindow::set_host()
 {   
     //作为服务器初始化，小红帽写
     //此时双方链接已经建立
-    for(int i=1;i<=4;i++)
-    {
-        ButtonMap[1][i]->setIcon(icons[1][i]);
-        ButtonMap[1][8-i]->setIcon(icons[1][i]);
-    }
-    ButtonMap[1][5]->setIcon(icons[1][5]);
-    for(int i=1;i<=8;i++)
-    {
-        ButtonMap[2][i]->setIcon(icons[1][6]);
-    }
-    for(int i=1;i<=4;i++)
-    {
-        ButtonMap[8][i]->setIcon(icons[2][i]);
-        ButtonMap[8][8-i]->setIcon(icons[2][i]);
-    }
-    ButtonMap[8][5]->setIcon(icons[2][5]);
-    for(int i=1;i<=8;i++)
-    {
-        ButtonMap[7][i]->setIcon(icons[2][6]);
-    }
+    int myboard[9][9] = {
+        0,0,0,0,0,0,0,0,0,
+        0,1,2,3,4,5,3,2,1,
+        0,6,6,6,6,6,6,6,6,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,-6,-6,-6,-6,-6,-6,-6,-6,
+        0,-1,-2,-3,-4,-5,-3,-2,-1
+    };
+    memcpy(board,myboard,sizeof(myboard));
+    setBoard();
 }
 
 void MainWindow::set_client()
 {
     //作为客户端初始化，小红帽写
     //此时双方链接已经建立
+    int myboard[9][9] = {
+        0,0,0,0,0,0,0,0,0,
+        0,1,2,3,4,5,3,2,1,
+        0,6,6,6,6,6,6,6,6,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,
+        0,-6,-6,-6,-6,-6,-6,-6,-6,
+        0,-1,-2,-3,-4,-5,-3,-2,-1
+    };
+    memcpy(board,myboard,sizeof(myboard));
+    setBoard();
 }
 
 void MainWindow::on_action_triggered()
