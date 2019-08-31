@@ -119,8 +119,6 @@ void MainWindow::move(int x,int y)
 {
     board[x][y]=board[fromx][fromy];
     board[fromx][fromy] = 0;
-    setBoard();
-    send_board();
 }
 void MainWindow::sethighlight(int x,int y)
 {
